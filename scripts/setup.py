@@ -92,7 +92,7 @@ class Control:
         if not self.activity_data:
             return
         else:
-            with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "src/assets/test.json"), 'w') as f:
+            with open(os.path.join(os.path.dirname(os.path.dirname(__file__)), "src/assets/fit_data.json"), 'w') as f:
                 json.dump(self.activity_data, f)
 
 start = Control()
