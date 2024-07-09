@@ -1,35 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
+import fitData from './assets/fit_data.json';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const fitnessData = fitData.map(function (entry) {
+    if (entry.fitnessActivity === 'biking') {
+      let miles = entry.aggregate[2].floatValue * 0.000621371;
+      let mph = entry.aggregate[3].floatValue * 2.23694;
+      let kmh = entry.aggregate[3].floatValue * 3.6;
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      return {
+        activity: entry.fitnessActivity,
+        duration: entry.aggregate[4].floatValue,
+        calories: entry.aggregate[1].floatValue,
+        miles: Math.round(miles * 100) / 100,
+        kilometers: Math.round(entry.aggregate[2].floatValue / 10) / 100,
+        averageMPH: Math.round(mph * 100) / 100,
+        averageKMH: Math.round(kmh * 100) / 100,
+        date: entry.startTime,
+      };
+    }
+  });
+
+  const [statistics, setStatistics] = useState(fitnessData);
+
+  return <></>;
 }
 
-export default App
+export default App;
