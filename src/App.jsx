@@ -19,6 +19,17 @@ function App() {
         averageKMH: Math.round(kmh * 100) / 100,
         date: entry.startTime,
       };
+    } else if (entry.fitnessActivity === 'walking') {
+      let milesWalked = entry.aggregate[3].floatValue * 0.000621371;
+      let kmWalked = entry.aggregate[3].floatValue * 0.001;
+
+      return {
+        activity: entry.fitnessActivity,
+        steps: entry.aggregate[2].intValue,
+        duration: entry.aggregate[5].intValue,
+        kilometers: Math.round(kmWalked * 100) / 100,
+        miles: Math.round(milesWalked * 100) / 100,
+      };
     }
   });
 
