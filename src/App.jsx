@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 import fitData from './assets/fit_data.json';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Distance from './components/Distance';
 
 function App() {
   const fitnessData = fitData.map(function (entry) {
@@ -35,7 +37,15 @@ function App() {
 
   const [statistics, setStatistics] = useState(fitnessData);
 
-  return <></>;
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Distance statistics={statistics} />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
 }
 
 export default App;
