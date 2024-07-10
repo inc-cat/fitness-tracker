@@ -59,17 +59,16 @@ function App() {
         duration: durationIndex.intValue,
         kilometers: Math.round(kmWalked * 100) / 100,
         miles: Math.round(milesWalked * 100) / 100,
+        date: entry.startTime,
       };
     }
   });
-
-  const [statistics, setStatistics] = useState(fitnessData);
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Distance statistics={statistics} />} />
+          <Route path="/" element={<Distance statistics={fitnessData} />} />
         </Routes>
       </BrowserRouter>
     </>
