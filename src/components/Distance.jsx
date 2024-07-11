@@ -21,10 +21,6 @@ export default function Distance(props) {
   };
 
   const labels = {
-    combined: {
-      km: ['Date', 'Distance (Kilometers)', 'Duration (Minutes)'],
-      miles: ['Date', 'Distance (Miles)', 'Duration (Minutes)'],
-    },
     biking: {
       km: ['Date', 'Distance (Kilometers)', 'Average Speed (km/h)', 'Calories'],
       miles: ['Date', 'Distance (Miles)', 'Average Speed (mph)', 'Calories'],
@@ -41,7 +37,11 @@ export default function Distance(props) {
 
   let query = props.statistics
     .filter(function (entry) {
-      return entry.activity === exerciseMode;
+      if (exerciseMode === 'combined') {
+        return true;
+      } else {
+        return entry.activity === exerciseMode;
+      }
     })
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -51,7 +51,6 @@ export default function Distance(props) {
         <select name="mode" ref={modeRef}>
           <option value="biking">Cycling</option>
           <option value="walking">Walking</option>
-          <option value="">Combined</option>
         </select>
         <select name="distance" ref={distanceRef}>
           <option value="km">km</option>
@@ -59,7 +58,6 @@ export default function Distance(props) {
         </select>
         <input type="submit" value="Refresh!"></input>
       </form>
-      <h1>{props.statistics[0].activity}</h1>
       <table>
         <tr>
           {statsShowcase.map(function (title) {
@@ -96,11 +94,13 @@ export default function Distance(props) {
               </tr>
             );
           } else if (exerciseMode === 'walking' && measurement === 'miles') {
-            <tr>
-              <td>{entry.date.substring(0, 10)}</td>
-              <td>{entry.steps}</td>
-              <td>{entry.miles}</td>
-            </tr>;
+            return (
+              <tr>
+                <td>{entry.date.substring(0, 10)}</td>
+                <td>{entry.steps}</td>
+                <td>{entry.miles}</td>
+              </tr>
+            );
           }
         })}
       </table>
