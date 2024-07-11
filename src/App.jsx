@@ -29,7 +29,7 @@ function App() {
 
       return {
         activity: entry.fitnessActivity,
-        duration: durationIndex.floatValue,
+        duration: durationIndex.intValue,
         calories: Math.round(caloriesIndex.floatValue * 100) / 100,
         miles: Math.round(miles * 100) / 100,
         kilometers: Math.round(distanceIndex.floatValue / 10) / 100,

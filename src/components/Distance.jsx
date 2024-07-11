@@ -3,6 +3,45 @@ export default function Distance(props) {
   const modeRef = useRef();
   const distanceRef = useRef();
 
+  function dayMerge(stats) {
+    const mergedData = {};
+
+    stats.forEach(function (entry) {
+      const key = entry.activity + entry.date.slice(0, 10);
+
+      if (!mergedData[key]) {
+        mergedData[key] = { ...entry, count: 1 };
+      } else {
+        for (let val in entry) {
+          if (
+            val !== 'activity' &&
+            val !== 'date' &&
+            val !== 'averageKMH' &&
+            val !== 'averageMiles'
+          ) {
+            mergedData[key][val] += entry[val];
+          }
+        }
+
+        mergedData[key].averageKMH =
+          (mergedData[key].averageKMH * mergedData[key].count +
+            entry.averageKMH) /
+          (mergedData[key].count + 1);
+        mergedData[key].averageMiles =
+          (mergedData[key].averageMiles * mergedData[key].count +
+            entry.averageMiles) /
+          (mergedData[key].count + 1);
+        mergedData[key].count += 1;
+      }
+    });
+
+    for (let key in mergedData) {
+      delete mergedData[key].count;
+    }
+
+    return Object.values(mergedData);
+  }
+
   const modeSubmit = function (event) {
     event.preventDefault();
     const mode = modeRef.current.value;
@@ -35,15 +74,17 @@ export default function Distance(props) {
   const [statsShowcase, setStatsShowcase] = useState(labels.biking.km);
   const [measurement, setMeasurement] = useState('km');
 
-  let query = props.statistics
-    .filter(function (entry) {
-      if (exerciseMode === 'combined') {
-        return true;
-      } else {
-        return entry.activity === exerciseMode;
-      }
-    })
-    .sort((a, b) => new Date(a.date) - new Date(b.date));
+  let query = dayMerge(
+    props.statistics
+      .filter(function (entry) {
+        if (exerciseMode === 'combined') {
+          return true;
+        } else {
+          return entry.activity === exerciseMode;
+        }
+      })
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+  );
 
   return (
     <>
@@ -67,38 +108,28 @@ export default function Distance(props) {
           })}
         </tr>
         {query.map(function (entry) {
-          if (exerciseMode === 'biking' && measurement == 'miles') {
+          console.log(props.statistics);
+          if (exerciseMode === 'biking') {
             return (
               <tr>
                 <td>{entry.date.substring(0, 10)}</td>
-                <td>{entry.miles}</td>
-                <td>{entry.averageMPH}</td>
+                <td>
+                  {measurement === 'miles' ? entry.miles : entry.kilometers}
+                </td>
+                <td>
+                  {measurement === 'miles'
+                    ? entry.averageMPH
+                    : entry.averageKMH}
+                </td>
                 <td>{entry.calories}</td>
               </tr>
             );
-          } else if (exerciseMode === 'biking' && measurement == 'km') {
-            return (
-              <tr>
-                <td>{entry.date.substring(0, 10)}</td>
-                <td>{entry.kilometers}</td>
-                <td>{entry.averageKMH}</td>
-                <td>{entry.calories}</td>
-              </tr>
-            );
-          } else if (exerciseMode === 'walking' && measurement === 'km') {
+          } else if (exerciseMode === 'walking') {
             return (
               <tr>
                 <td>{entry.date.substring(0, 10)}</td>
                 <td>{entry.steps}</td>
-                <td>{entry.kilometers}</td>
-              </tr>
-            );
-          } else if (exerciseMode === 'walking' && measurement === 'miles') {
-            return (
-              <tr>
-                <td>{entry.date.substring(0, 10)}</td>
-                <td>{entry.steps}</td>
-                <td>{entry.miles}</td>
+                <td>{measurement === 'km' ? entry.kilometers : entry.miles}</td>
               </tr>
             );
           }
