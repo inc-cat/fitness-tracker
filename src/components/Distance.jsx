@@ -61,12 +61,24 @@ export default function Distance(props) {
 
   const labels = {
     biking: {
-      km: ['Date', 'Distance (Kilometers)', 'Average Speed (km/h)', 'Calories'],
-      miles: ['Date', 'Distance (Miles)', 'Average Speed (mph)', 'Calories'],
+      km: [
+        'Date',
+        'Distance (Kilometers)',
+        'Average Speed (km/h)',
+        'Calories',
+        'Duration (minutes)',
+      ],
+      miles: [
+        'Date',
+        'Distance (Miles)',
+        'Average Speed (mph)',
+        'Calories',
+        'Duration (minutes)',
+      ],
     },
     walking: {
-      km: ['Date', 'Steps', 'Distance (Kilometers)'],
-      miles: ['Date', 'Steps', 'Distance (Miles)'],
+      km: ['Date', 'Steps', 'Distance (Kilometers)', 'Duration (minutes)'],
+      miles: ['Date', 'Steps', 'Distance (Miles)', 'Duration (minutes)'],
     },
   };
 
@@ -122,6 +134,7 @@ export default function Distance(props) {
                     : entry.averageKMH}
                 </td>
                 <td>{entry.calories}</td>
+                <td>{entry.duration}</td>
               </tr>
             );
           } else if (exerciseMode === 'walking') {
@@ -130,6 +143,7 @@ export default function Distance(props) {
                 <td>{entry.date.substring(0, 10)}</td>
                 <td>{entry.steps}</td>
                 <td>{measurement === 'km' ? entry.kilometers : entry.miles}</td>
+                <td>{entry.duration}</td>
               </tr>
             );
           }
