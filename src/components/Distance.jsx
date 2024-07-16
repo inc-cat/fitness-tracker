@@ -17,21 +17,22 @@ export default function Distance(props) {
             val !== 'activity' &&
             val !== 'date' &&
             val !== 'averageKMH' &&
-            val !== 'averageMiles'
+            val !== 'averageMPH'
           ) {
             mergedData[key][val] += entry[val];
           }
         }
 
         mergedData[key].averageKMH =
-          (mergedData[key].averageKMH * mergedData[key].count +
+          (mergedData[key].averageKMH * mergedData[key].duration +
             entry.averageKMH) /
-          (mergedData[key].count + 1);
-        mergedData[key].averageMiles =
-          (mergedData[key].averageMiles * mergedData[key].count +
-            entry.averageMiles) /
-          (mergedData[key].count + 1);
+          (mergedData[key].duration + entry.duration);
+        mergedData[key].averageMPH =
+          (mergedData[key].averageMPH * mergedData[key].duration +
+            entry.averageMPH) /
+          (mergedData[key].duration + entry.duration);
         mergedData[key].count += 1;
+        mergedData[key].duration += entry.duration;
       }
     });
 
@@ -39,7 +40,18 @@ export default function Distance(props) {
       delete mergedData[key].count;
     }
 
-    return Object.values(mergedData);
+    return Object.values(mergedData).map(function (data) {
+      return {
+        activity: data.activity,
+        averageKMH: data.averageKMH.toFixed(2),
+        averageMPH: data.averageMPH.toFixed(2),
+        calories: data.calories.toFixed(2),
+        date: data.date,
+        duration: data.duration,
+        kilometers: data.kilometers.toFixed(2),
+        miles: data.miles.toFixed(2),
+      };
+    });
   }
 
   const modeSubmit = function (event) {
@@ -120,7 +132,6 @@ export default function Distance(props) {
           })}
         </tr>
         {query.map(function (entry) {
-          console.log(props.statistics);
           if (exerciseMode === 'biking') {
             return (
               <tr>
