@@ -43,9 +43,9 @@ export default function Distance(props) {
     return Object.values(mergedData).map(function (data) {
       return {
         activity: data.activity,
-        averageKMH: data.averageKMH.toFixed(2),
-        averageMPH: data.averageMPH.toFixed(2),
-        calories: data.calories.toFixed(2),
+        averageKMH: data.averageKMH?.toFixed(2),
+        averageMPH: data.averageMPH?.toFixed(2),
+        calories: data.calories?.toFixed(2),
         date: data.date,
         duration: data.duration,
         kilometers: data.kilometers.toFixed(2),

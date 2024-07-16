@@ -30,11 +30,11 @@ function App() {
       return {
         activity: entry.fitnessActivity,
         duration: durationIndex.intValue,
-        calories: Math.round(caloriesIndex.floatValue * 100) / 100,
-        miles: Math.round(miles * 100) / 100,
-        kilometers: Math.round(distanceIndex.floatValue / 10) / 100,
-        averageMPH: Math.round(mph * 100) / 100,
-        averageKMH: Math.round(kmh * 100) / 100,
+        calories: caloriesIndex.floatValue,
+        miles: miles,
+        kilometers: distanceIndex.floatValue / 1e3,
+        averageMPH: mph,
+        averageKMH: kmh,
         date: entry.startTime,
       };
     } else if (entry.fitnessActivity === 'walking') {
