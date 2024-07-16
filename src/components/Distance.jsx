@@ -50,6 +50,7 @@ export default function Distance(props) {
         duration: data.duration,
         kilometers: data.kilometers.toFixed(2),
         miles: data.miles.toFixed(2),
+        steps: data.steps,
       };
     });
   }
