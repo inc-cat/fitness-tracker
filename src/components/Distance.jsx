@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import Visuals from './Visuals';
 export default function Distance(props) {
   const modeRef = useRef();
   const distanceRef = useRef();
@@ -113,6 +114,7 @@ export default function Distance(props) {
 
   return (
     <>
+      <Visuals mode={exerciseMode} measurement={measurement} show={query} />
       <form onSubmit={modeSubmit}>
         <select name="mode" ref={modeRef}>
           <option value="biking">Cycling</option>
