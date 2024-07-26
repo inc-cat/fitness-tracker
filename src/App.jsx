@@ -7,6 +7,7 @@ import Distance from './components/Distance';
 function App() {
   const fitnessData = fitData
     .map(function (entry) {
+      let kmTotal = 0;
       if (entry.fitnessActivity === 'biking') {
         let distanceIndex = entry.aggregate.find(function (ind) {
           return ind.metricName === 'com.google.distance.delta';

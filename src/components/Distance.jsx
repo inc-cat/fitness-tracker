@@ -112,6 +112,18 @@ export default function Distance(props) {
       .sort((a, b) => new Date(a.date) - new Date(b.date))
   );
 
+  let totalKM = 0;
+  let totalCalories = 0;
+  let totalMiles = 0;
+  let totalDuration = 0;
+  query.forEach(function (entry) {
+    totalKM += Number(entry.kilometers);
+    totalMiles += Number(entry.miles);
+    totalCalories += Number(entry.calories);
+    totalDuration += Number(entry.duration);
+    console.log(totalKM);
+  });
+
   return (
     <>
       <Visuals mode={exerciseMode} measurement={measurement} show={query} />
@@ -163,6 +175,10 @@ export default function Distance(props) {
           }
         })}
       </table>
+      <p>Total km: {totalKM.toFixed(2)}</p>
+      <p>Total miles: {totalMiles.toFixed(2)}</p>
+      <p>Total calories: {totalCalories.toFixed(2)}</p>
+      <p>Total minutes: {totalDuration}</p>
     </>
   );
 }
