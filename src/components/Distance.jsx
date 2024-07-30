@@ -3,6 +3,8 @@ import Visuals from './Visuals';
 export default function Distance(props) {
   const modeRef = useRef();
   const distanceRef = useRef();
+  const startRef = useRef();
+  const endRef = useRef();
 
   function dayMerge(stats) {
     const mergedData = {};
@@ -60,6 +62,9 @@ export default function Distance(props) {
     event.preventDefault();
     const mode = modeRef.current.value;
     const measurement = distanceRef.current.value;
+    const dateStart = startRef.current.value;
+    const dateEnd = endRef.current.value;
+
     if (mode === 'biking' && measurement === 'miles') {
       setStatsShowcase(labels.biking.miles);
     } else if (mode === 'biking' && measurement === 'km') {
@@ -71,6 +76,8 @@ export default function Distance(props) {
     }
     setExerciseMode(mode);
     setMeasurement(measurement);
+    setStart(dateStart);
+    setEnd(dateEnd);
   };
 
   const labels = {
@@ -99,6 +106,8 @@ export default function Distance(props) {
   const [exerciseMode, setExerciseMode] = useState('biking');
   const [statsShowcase, setStatsShowcase] = useState(labels.biking.km);
   const [measurement, setMeasurement] = useState('km');
+  const [start, setStart] = useState();
+  const [end, setEnd] = useState();
 
   let query = dayMerge(
     props.statistics
@@ -110,24 +119,37 @@ export default function Distance(props) {
         }
       })
       .sort((a, b) => new Date(a.date) - new Date(b.date))
-  );
+  ).filter(function (entry) {
+    if (!start || !end) {
+      return true;
+    }
+    let date1 = new Date(entry.date);
+    let startDate = new Date(start);
+    let endDate = new Date(end);
+
+    return startDate < date1 && date1 < endDate;
+  });
 
   let totalKM = 0;
   let totalCalories = 0;
   let totalMiles = 0;
   let totalDuration = 0;
+  let dates = [];
   query.forEach(function (entry) {
     totalKM += Number(entry.kilometers);
     totalMiles += Number(entry.miles);
     totalCalories += Number(entry.calories);
     totalDuration += Number(entry.duration);
-    console.log(totalKM);
+    dates.push(entry.date.substring(0, 10));
   });
 
   return (
     <>
       <Visuals mode={exerciseMode} measurement={measurement} show={query} />
       <form onSubmit={modeSubmit}>
+        <input type="date" id="start" ref={startRef} />
+        <input type="date" id="end" ref={endRef} />
+        <br></br>
         <select name="mode" ref={modeRef}>
           <option value="biking">Cycling</option>
           <option value="walking">Walking</option>
@@ -137,6 +159,7 @@ export default function Distance(props) {
           <option value="miles">Miles</option>
         </select>
         <input type="submit" value="Refresh!"></input>
+        <br></br>
       </form>
       <table>
         <tr>
