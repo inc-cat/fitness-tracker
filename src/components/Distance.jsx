@@ -63,7 +63,12 @@ export default function Distance(props) {
     const mode = modeRef.current.value;
     const measurement = distanceRef.current.value;
     const dateStart = startRef.current.value;
-    const dateEnd = endRef.current.value;
+    let dateEnd = new Date(endRef.current.value);
+
+    dateEnd.setDate(dateEnd.getDate() + 1);
+    let newYear = dateEnd.getFullYear();
+    let newMonth = String(dateEnd.getMonth() + 1).padStart(2, '0');
+    let newDay = String(dateEnd.getDate()).padStart(2, '0');
 
     if (mode === 'biking' && measurement === 'miles') {
       setStatsShowcase(labels.biking.miles);
@@ -77,7 +82,7 @@ export default function Distance(props) {
     setExerciseMode(mode);
     setMeasurement(measurement);
     setStart(dateStart);
-    setEnd(dateEnd);
+    setEnd(new Date(`${newYear}-${newMonth}-${newDay}`));
   };
 
   const labels = {
