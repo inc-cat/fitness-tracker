@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import Visuals from './Visuals';
+import './style.css';
 export default function Distance(props) {
   const modeRef = useRef();
   const distanceRef = useRef();
@@ -166,7 +167,7 @@ export default function Distance(props) {
         <input type="submit" value="Refresh!"></input>
         <br></br>
       </form>
-      <table>
+      <table className="scroll">
         <tr>
           {statsShowcase.map(function (title) {
             {
@@ -203,6 +204,7 @@ export default function Distance(props) {
           }
         })}
       </table>
+
       <p>Total km: {totalKM.toFixed(2)}</p>
       <p>Total miles: {totalMiles.toFixed(2)}</p>
       <p>Total calories: {totalCalories.toFixed(2)}</p>
