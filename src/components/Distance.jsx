@@ -6,6 +6,7 @@ export default function Distance(props) {
   const distanceRef = useRef();
   const startRef = useRef();
   const endRef = useRef();
+  const calculationRef = useRef();
 
   function dayMerge(stats) {
     const mergedData = {};
@@ -84,6 +85,7 @@ export default function Distance(props) {
     setMeasurement(measurement);
     setStart(dateStart);
     setEnd(new Date(`${newYear}-${newMonth}-${newDay}`));
+    setCalculation(calculationRef.current.value);
   };
 
   const labels = {
@@ -114,6 +116,7 @@ export default function Distance(props) {
   const [measurement, setMeasurement] = useState('km');
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
+  const [calculation, setCalculation] = useState('daily');
 
   let query = dayMerge(
     props.statistics
@@ -151,11 +154,20 @@ export default function Distance(props) {
 
   return (
     <>
-      <Visuals mode={exerciseMode} measurement={measurement} show={query} />
+      <Visuals
+        mode={exerciseMode}
+        measurement={measurement}
+        show={query}
+        calculate={calculation}
+      />
       <form onSubmit={modeSubmit}>
         <input type="date" id="start" ref={startRef} />
         <input type="date" id="end" ref={endRef} />
         <br></br>
+        <select name="calculation" ref={calculationRef}>
+          <option value="daily">Daily</option>
+          <option value="cumulative">Cumulative</option>
+        </select>
         <select name="mode" ref={modeRef}>
           <option value="biking">Cycling</option>
           <option value="walking">Walking</option>
