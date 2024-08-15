@@ -196,41 +196,47 @@ export default function Distance(props) {
         <br></br>
       </form>
       <table className="scroll">
-        <tr>
-          {statsShowcase.map(function (title) {
-            {
-              return <th>{title}</th>;
+        <thead>
+          <tr>
+            {statsShowcase.map(function (title) {
+              {
+                return <th>{title}</th>;
+              }
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {query.map(function (entry) {
+            if (exerciseMode === 'biking') {
+              return (
+                <tr>
+                  <td>{entry.date.substring(0, 10)}</td>
+                  <td>
+                    {measurement === 'miles' ? entry.miles : entry.kilometers}
+                  </td>
+                  <td>
+                    {measurement === 'miles'
+                      ? entry.averageMPH
+                      : entry.averageKMH}
+                  </td>
+                  <td>{entry.calories}</td>
+                  <td>{entry.duration}</td>
+                </tr>
+              );
+            } else if (exerciseMode === 'walking') {
+              return (
+                <tr>
+                  <td>{entry.date.substring(0, 10)}</td>
+                  <td>{entry.steps}</td>
+                  <td>
+                    {measurement === 'km' ? entry.kilometers : entry.miles}
+                  </td>
+                  <td>{entry.duration}</td>
+                </tr>
+              );
             }
           })}
-        </tr>
-        {query.map(function (entry) {
-          if (exerciseMode === 'biking') {
-            return (
-              <tr>
-                <td>{entry.date.substring(0, 10)}</td>
-                <td>
-                  {measurement === 'miles' ? entry.miles : entry.kilometers}
-                </td>
-                <td>
-                  {measurement === 'miles'
-                    ? entry.averageMPH
-                    : entry.averageKMH}
-                </td>
-                <td>{entry.calories}</td>
-                <td>{entry.duration}</td>
-              </tr>
-            );
-          } else if (exerciseMode === 'walking') {
-            return (
-              <tr>
-                <td>{entry.date.substring(0, 10)}</td>
-                <td>{entry.steps}</td>
-                <td>{measurement === 'km' ? entry.kilometers : entry.miles}</td>
-                <td>{entry.duration}</td>
-              </tr>
-            );
-          }
-        })}
+        </tbody>
       </table>
 
       <p>Total km: {totalKM.toFixed(2)}</p>
