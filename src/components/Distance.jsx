@@ -144,13 +144,28 @@ export default function Distance(props) {
   let totalMiles = 0;
   let totalDuration = 0;
   let dates = [];
+  let cumulativeKM = [];
+  let cumulativeMiles = [];
+  let cumulativeCalories = [];
+  let cumulativeDuration = [];
   query.forEach(function (entry) {
     totalKM += Number(entry.kilometers);
+    cumulativeKM.push(Number(totalKM.toFixed(2)));
     totalMiles += Number(entry.miles);
+    cumulativeMiles.push(Number(totalMiles.toFixed(2)));
     totalCalories += Number(entry.calories);
+    cumulativeCalories.push(Number(totalCalories.toFixed(2)));
     totalDuration += Number(entry.duration);
+    cumulativeDuration.push(Number(totalDuration.toFixed(2)));
+
     dates.push(entry.date.substring(0, 10));
   });
+  let cumulativeMeasure = {
+    km: cumulativeKM,
+    miles: cumulativeMiles,
+    calories: cumulativeCalories,
+    duration: cumulativeDuration,
+  };
 
   return (
     <>
@@ -159,6 +174,7 @@ export default function Distance(props) {
         measurement={measurement}
         show={query}
         calculate={calculation}
+        amounts={cumulativeMeasure}
       />
       <form onSubmit={modeSubmit}>
         <input type="date" id="start" ref={startRef} />
